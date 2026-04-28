@@ -1,0 +1,121 @@
+const fs = require('fs');
+const path = require('path');
+
+// DatePicker Bundle
+const datepickerBundle = `(function(root, factory) {
+  if (typeof module === 'object' && module.exports) {
+    module.exports = factory(require('react'));
+  } else {
+    root.AppsmithDatePicker = factory(root.React);
+  }
+})(this, function(React) {
+  return function(props) {
+    const { value = '', onChange, label = 'Date', placeholder = 'Select date', disabled = false, required = false, size = 'md', error = '' } = props;
+    
+    const inputStyle = {
+      width: '100%',
+      padding: size === 'sm' ? '6px' : size === 'lg' ? '12px' : '8px',
+      border: '1px solid ' + (error ? '#dc2626' : '#d1d5db'),
+      borderRadius: '6px',
+      fontSize: size === 'sm' ? '12px' : size === 'lg' ? '16px' : '14px',
+      boxSizing: 'border-box'
+    };
+    
+    const handleChange = (e) => onChange && onChange(e.target.value);
+    
+    return React.createElement('div', { style: { padding: '10px', fontFamily: 'Arial, sans-serif' } }, [
+      React.createElement('label', { key: 'label', style: { display: 'block', marginBottom: '5px', fontWeight: 'bold', color: error ? '#dc2626' : '#374151' } },
+        label,
+        required && React.createElement('span', { key: 'star', style: { color: '#dc2626', marginLeft: '4px' } }, '*')
+      ),
+      React.createElement('input', {
+        key: 'input',
+        type: 'date',
+        value: value,
+        onChange: handleChange,
+        placeholder: placeholder,
+        disabled: disabled,
+        required: required,
+        style: inputStyle
+      }),
+      error && React.createElement('div', { key: 'error', style: { color: '#dc2626', fontSize: '12px', marginTop: '5px' } }, error)
+    ]);
+  };
+});`;
+
+// FileUpload Bundle
+const fileuploadBundle = `(function(root, factory) {
+  if (typeof module === 'object' && module.exports) {
+    module.exports = factory(require('react'));
+  } else {
+    root.AppsmithFileUpload = factory(root.React);
+  }
+})(this, function(React) {
+  return function(props) {
+    const { value = '', onChange, label = 'Upload File', accept = '.pdf,.jpg,.png', disabled = false, required = false, error = '' } = props;
+    
+    const handleFileChange = (e) => {
+      const file = e.target.files[0];
+      if (file && onChange) {
+        onChange({ name: file.name, size: file.size, type: file.type });
+      }
+    };
+    
+    return React.createElement('div', { style: { padding: '10px', fontFamily: 'Arial, sans-serif' } }, [
+      React.createElement('label', { key: 'label', style: { display: 'block', marginBottom: '5px', fontWeight: 'bold', color: error ? '#dc2626' : '#374151' } },
+        label,
+        required && React.createElement('span', { key: 'star', style: { color: '#dc2626', marginLeft: '4px' } }, '*')
+      ),
+      React.createElement('input', {
+        key: 'input',
+        type: 'file',
+        accept: accept,
+        onChange: handleFileChange,
+        disabled: disabled,
+        required: required,
+        style: { width: '100%', padding: '8px', border: '1px solid ' + (error ? '#dc2626' : '#d1d5db'), borderRadius: '6px', boxSizing: 'border-box' }
+      }),
+      value && React.createElement('div', { key: 'info', style: { marginTop: '5px', fontSize: '12px', color: '#6b7280' } }, 
+        'Selected: ' + (typeof value === 'object' ? value.name : value)
+      ),
+      error && React.createElement('div', { key: 'error', style: { color: '#dc2626', fontSize: '12px', marginTop: '5px' } }, error)
+    ]);
+  };
+});`;
+
+// LoanBadge Bundle
+const loanbadgeBundle = `(function(root, factory) {
+  if (typeof module === 'object' && module.exports) {
+    module.exports = factory(require('react'));
+  } else {
+    root.AppsmithLoanBadge = factory(root.React);
+  }
+})(this, function(React) {
+  const statusColors = { approved: '#10b981', pending: '#f59e0b', rejected: '#ef4444', completed: '#3b82f6' };
+  
+  return function(props) {
+    const { status = 'pending', amount = 0, customerName = '', dueDate = '', onClick } = props;
+    
+    return React.createElement('div', { 
+      style: { padding: '15px', border: '1px solid #e5e7eb', borderRadius: '8px', fontFamily: 'Arial, sans-serif', cursor: onClick ? 'pointer' : 'default', backgroundColor: 'white' },
+      onClick: () => onClick && onClick({ status, amount, customerName, dueDate })
+    }, [
+      React.createElement('div', { key: 'header', style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' } }, [
+        React.createElement('span', { key: 'name', style: { fontWeight: 'bold', color: '#6b7280' } }, customerName || 'Customer'),
+        React.createElement('span', { key: 'badge', style: { display: 'inline-block', padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold', backgroundColor: statusColors[status.toLowerCase()] || '#6b7280', color: 'white' } }, status.toUpperCase())
+      ]),
+      React.createElement('div', { key: 'amount', style: { fontSize: '24px', fontWeight: 'bold', color: '#1f2937', margin: '10px 0' } }, '$' + amount.toLocaleString()),
+      dueDate && React.createElement('div', { key: 'due', style: { fontSize: '12px', color: '#6b7280', marginTop: '10px' } }, 'Due: ' + new Date(dueDate).toLocaleDateString())
+    ]);
+  };
+});`;
+
+// Write all bundles
+fs.writeFileSync(path.join(__dirname, '../dist/datepicker-bundle.js'), datepickerBundle);
+fs.writeFileSync(path.join(__dirname, '../dist/fileupload-bundle.js'), fileuploadBundle);
+fs.writeFileSync(path.join(__dirname, '../dist/loanbadge-bundle.js'), loanbadgeBundle);
+
+console.log('✓ All bundles created successfully!');
+console.log('  - dist/datepicker-bundle.js');
+console.log('  - dist/fileupload-bundle.js');
+console.log('  - dist/loanbadge-bundle.js');

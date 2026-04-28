@@ -1,0 +1,27 @@
+{
+  "name": "storybookcomp",
+  "version": "1.0.0",
+  "description": "Appsmith Custom Components",
+  "main": "index.js",
+  "scripts": {
+    "build:all": "node scripts/build-all.js",
+    "build:datepicker": "node scripts/build-all.js",
+    "build:fileupload": "node scripts/build-all.js",
+    "build:loanbadge": "node scripts/build-all.js",
+    "dev": "npx serve dist -p 5500",
+    "clean": "rmdir /s /q dist 2>nul & mkdir dist"
+  },
+  "keywords": ["appsmith", "custom-widgets", "react"],
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.0",
+    "cross-env": "^7.0.3",
+    "terser": "^5.46.2",
+    "vite": "^5.0.0"
+  }
+}
