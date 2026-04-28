@@ -42,7 +42,7 @@ const FileUpload = ({
   return (
     <div style={{ fontFamily: 'Inter, Arial, sans-serif', padding: '4px' }}>
       
-      {/* Label */}
+      {/* LabeL */}
       <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', fontWeight: '600', color: error ? '#dc2626' : '#374151' }}>
         {label}
         {required && <span style={{ color: '#dc2626', marginLeft: '3px' }}>*</span>}
